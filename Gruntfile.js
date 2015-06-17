@@ -5,9 +5,7 @@
 //- Clean dist directory
 //- Copy file to dist directory
 //- Compile less, sass, coffee script into dist directory
-//- Concat css, js both to be single file in dist directory
-//- Compressor css and js file in dist directory
-//- Injector css and js file to html
+//- Adjust html page file's extension to deployed file extension
 
 module.exports = function (grunt){
     // auto-load npm task components
@@ -26,7 +24,7 @@ module.exports = function (grunt){
             build: {
                 files: [
                     {
-                        src: [ 'assets/scripts/*', 'assets/images/*', '*.html'],
+                        src: [ 'assets/scripts/*', 'assets/stylesheets/*', 'assets/images/*', '*.html'],
                         dest: 'dist/',
                         expand: true
                     }
@@ -45,63 +43,25 @@ module.exports = function (grunt){
             }
         },
 
+        autoprefixer: {
+            options: {
+                // Task-specific options go here.
+            },
+            build: {
+                // Target-specific file lists and/or options go here.
+                expand: true,
+                flatten: true,
+                src: 'dist/assets/stylesheets/*.css',
+                dest: 'dist/assets/stylesheets/'
+            }
+        },
+
         // concat and compressor css
         cssmin: {
             build: {
                 files: [{
                     'dist/assets/stylesheets/main.min.css': ['assets/stylesheets/*.css', 'dist/assets/stylesheets/*.css']
                 }]
-            }
-        },
-
-        // concat js
-        concat: {
-            build: {
-                src:'assets/scripts/placeholder.js',
-                dest:'dist/assets/scripts/placeholder.js'
-            }
-        },
-
-        // compressor js
-        uglify: {
-            build: {
-                src:['assets/scripts/*.js', '!assets/scripts/less.min.js'],
-                dest:'dist/assets/scripts/main.min.js'
-            }
-        },
-
-        // injector js and css files to html
-        injector: {
-            options: {
-                // Task-specific options go here.
-            },
-            css: {
-                options: {
-                    relative: true,
-                    transform: function (filePath){
-                        var filePath = filePath.replace('/dist/', '');
-                        return '<link rel="stylesheet" href="' + filePath + '" />';
-                    },
-                    starttag: '<!-- injector:css -->',
-                    endtag: '<!-- endinjector -->'
-                },
-                files: {
-                    'dist/index.html': ['dist/assets/stylesheets/*.css']
-                }
-            },
-            scripts: {
-                options: {
-                    relative: true,
-                    transform: function (filePath){
-                        var filePath = filePath.replace('/dist/', '');
-                        return '<script src="' + filePath + '"></script>';
-                    },
-                    starttag: '<!-- injector:js -->',
-                    endtag: '<!-- endinjector -->'
-                },
-                files: {
-                    'dist/index.html': ['dist/assets/scripts/*.js']
-                }
             }
         },
 
@@ -164,13 +124,11 @@ module.exports = function (grunt){
     grunt.registerTask('cleanDir', ['clean:build']); //ok
     grunt.registerTask('copyFileToDist', ['copy:build']); //ok
     grunt.registerTask('compileLess', ['less:build']); //ok
-    grunt.registerTask('concatCompressorCss', ['cssmin:build']); //ok
-    grunt.registerTask('makeJs', ['concat:build', 'uglify:build']); //ok
-    grunt.registerTask('injectFileToHtml', ['injector']); //ok
-    grunt.registerTask('removeUnuseFile', ['string-replace:deploy']); //ok
+    grunt.registerTask('autoPrefixer', ['autoprefixer:build']); //ok
+    grunt.registerTask('removeUnusedFile', ['string-replace:deploy']); //ok
+
     // main task
-    //grunt.registerTask('deploy', ['cleanDir', 'copyFileToDist', 'compileLess', 'concatCompressorCss', 'makeJs', 'injectFileToHtml']);
-    grunt.registerTask('deploy', ['cleanDir', 'copyFileToDist', 'compileLess', 'removeUnuseFile']);
+    grunt.registerTask('deploy', ['cleanDir', 'copyFileToDist', 'compileLess', 'autoPrefixer', 'removeUnusedFile']);
     grunt.registerTask('live', ['watch']);
 
 

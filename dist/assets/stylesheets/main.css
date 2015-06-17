@@ -69,12 +69,15 @@ input {
 /* scene */
 .para {
   opacity: 0;
-  transition: all 0.8s ease-in;
+  -webkit-transition: all 0.8s ease-in;
+          transition: all 0.8s ease-in;
 }
 .slogan {
   opacity: 0;
-  transition: all 1.2s ease-in;
-  transition-delay: 2.6s;
+  -webkit-transition: all 1.2s ease-in;
+          transition: all 1.2s ease-in;
+  -webkit-transition-delay: 2.6s;
+          transition-delay: 2.6s;
 }
 .scene.active {
   /* para show by order */
@@ -83,33 +86,44 @@ input {
   opacity: 1;
 }
 .scene.active .para01 {
-  transition-delay: .2s;
+  -webkit-transition-delay: .2s;
+          transition-delay: .2s;
 }
 .scene.active .para02 {
-  transition-delay: .8s;
+  -webkit-transition-delay: .8s;
+          transition-delay: .8s;
 }
 .scene.active .para03 {
-  transition-delay: 1.4s;
+  -webkit-transition-delay: 1.4s;
+          transition-delay: 1.4s;
 }
 .scene.active .para04 {
-  transition-delay: 2s;
+  -webkit-transition-delay: 2s;
+          transition-delay: 2s;
 }
 .scene.active .slogan {
   opacity: 1;
 }
 /* scene 01 */
 .scene01 .title {
-  transform: scale(0);
+  -webkit-transform: scale(0);
+      -ms-transform: scale(0);
+          transform: scale(0);
   opacity: 0;
-  transition: all 1s ease-out;
+  -webkit-transition: all 1s ease-out;
+          transition: all 1s ease-out;
 }
 .scene01 .logo {
   opacity: 0;
-  transition: all 1s ease-out;
-  transition-delay: 1s;
+  -webkit-transition: all 1s ease-out;
+          transition: all 1s ease-out;
+  -webkit-transition-delay: 1s;
+          transition-delay: 1s;
 }
 .scene01.active .title {
-  transform: scale(1);
+  -webkit-transform: scale(1);
+      -ms-transform: scale(1);
+          transform: scale(1);
   opacity: 1;
 }
 .scene01.active .logo {
