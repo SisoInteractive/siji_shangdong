@@ -49,7 +49,51 @@ var app = {
 
             'scene06-01',
             'scene06-02',
-            'scene06-05'
+            'scene06-05',
+
+            'scene07-01',
+            'scene07-02',
+            'scene07-03',
+            'scene07-ticket',
+
+            'scene08-01',
+            'scene08-02',
+
+            's2-hongzao',
+            's2-rice',
+            's2-shadow',
+            's2-stone',
+            's2-zongzi',
+            's2-zongziye',
+
+            's3-pork',
+            's3-wine',
+            's3-zongzi',
+
+            's4-04',
+            's4-panzi',
+            's4-yadan',
+            's4-zongzi',
+
+            's5-douzi',
+            's5-huasheng',
+            's5-huashenggroup',
+            's5-huashengli',
+            's5-rice',
+            's5-rice2',
+            's5-ricegroup',
+            's5-shadow',
+            's5-yumi',
+            's5-zongzi',
+
+            's6-group01',
+            's6-group02',
+            's6-group03',
+            's6-group04',
+            's6-group05',
+            's6-group06',
+            's6-ship',
+            's6-zongziye'
         ];
         var imgPath = "assets/images/";
         var imgLength = imgSrcArr.length;
@@ -76,8 +120,7 @@ var app = {
                             clearInterval(loadingTimer);
 
                             console.log('images load end');
-                        //}, 3000);
-                        }, 1);
+                        }, 3000);
                     }
                 }
             };
@@ -119,11 +162,13 @@ var app = {
         });
 
         //  first time play BGM
-        var isPlay = false;
-        $('body').click(function () {
-            isPlay == false ? $('audio')[0].play() : false;
-            isPlay = true;
-        });
+        var initSound = function () {
+            //  delay play
+            $('#audio')[0].play();
+
+            document.removeEventListener('touchstart', initSound, false);
+        };
+        document.addEventListener('touchstart', initSound, false);
 
         //  bind play again button
         $('.playAgain').click(function(){
@@ -134,13 +179,22 @@ var app = {
             }, 100);
         });
 
+        //  bind share button
+        $('.shareBtn').click(function(e){
+            $('.share').fadeIn();
+        });
+
+        $('.share').click(function (e) {
+            $('.share').fadeOut();
+        });
+
         // init game
         toTickerGame();
 
         //  开始游戏
         function toTickerGame () {
-            /** debug */
-            clearPlayCache();
+            /** debug: clear cache */
+            //clearPlayCache();
 
             if (!localStorage.isUserPlayedDuanwujie) {
                 app.server();
