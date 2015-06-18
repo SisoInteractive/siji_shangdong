@@ -4,6 +4,7 @@
 
 var app = {
     preload: function (){
+        var runningTimerStart = new Date();
         var loadingIndex = 1;
         var loadingTimer = null;
 
@@ -64,11 +65,20 @@ var app = {
 
                 /* check img load progress */
                 if (checkIsAllLoaded() && isLoaded == false) {
-                    $('.loading').fadeOut();
-                    $('.swiper-container').removeClass('hide');
-                    app.create();
+                    var runningTimerEnd = new Date();
                     isLoaded = true;
-                    console.log('images load end');
+
+                    if (runningTimerEnd - runningTimerStart < 1000*3) {
+                        setTimeout(function () {
+                            $('.loading').fadeOut();
+                            $('.swiper-container').removeClass('hide');
+                            app.create();
+                            clearInterval(loadingTimer);
+
+                            console.log('images load end');
+                        //}, 3000);
+                        }, 1);
+                    }
                 }
             };
         }
@@ -81,17 +91,15 @@ var app = {
 
     create: function (){
         //  create slider
-        var mySwiper = new Swiper ('.swiper-container', {
+        app.mySwiper = new Swiper ('.swiper-container', {
             direction: 'vertical',
-
-            effect: 'fade',
 
             noSwiping: false,
 
             // init
             onInit: function () {
                 console.log('Initialized...');
-              $('.scene01').addClass('active');
+                $('.scene01').addClass('active');
             },
 
             //  router
@@ -103,8 +111,10 @@ var app = {
                     .siblings('.scene').removeClass('activeBg');
 
                 //  show content
-                $('.scene').eq(curIndex).addClass('active')
-                    .siblings('.scene').removeClass('active');
+                setTimeout(function () {
+                    $('.scene').eq(curIndex).addClass('active')
+                        .siblings('.scene').removeClass('active');
+                }, 250);
             }
         });
 
@@ -114,6 +124,172 @@ var app = {
             isPlay == false ? $('audio')[0].play() : false;
             isPlay = true;
         });
+
+        //  bind play again button
+        $('.playAgain').click(function(){
+            app.mySwiper.slideTo(0, 0, false);
+            setTimeout(function () {
+                $('.scene01').addClass('active')
+                    .siblings('.scene').removeClass('active');
+            }, 100);
+        });
+
+        // init game
+        toTickerGame();
+
+        //  开始游戏
+        function toTickerGame () {
+            /** debug */
+            //clearPlayCache();
+
+            if (!localStorage.isUserPlayedDuanwujie) {
+                app.server();
+            } else {
+                //  赢了卷
+                if (localStorage.isWinDuanwujie == 200) {
+                    $('.scene07 > *').hide();
+                    $('.scene07 .get-ticket').show();
+
+                }
+                //  活动过期
+                else if (localStorage.isWinDuanwujie == 10086) {
+                    $('.scene07 > *').hide();
+                    $('.scene07 .end').show();
+                } else {
+                    $('.scene07 > *').hide();
+                    $('.scene07 .not-get').show();
+                }
+            }
+        }
+
+        //  clear play cache
+        function clearPlayCache () {
+            localStorage.removeItem("isUserPlayedDuanwujie");
+            localStorage.removeItem("isWinDuanwujie");
+        }
+    },
+
+    server: function () {
+        console.log("Initializing server...");
+
+        //  try button
+        $('.try .try-btn').unbind('click');
+        $('.try .try-btn').bind('click', choujiang);
+
+        //  抽奖粽子跟抽奖按钮的效果
+        setTimeout(function () {
+            $('.try .zongzi').addClass('bounce');
+            setTimeout(function () {
+                $('.try .try-btn').addClass('bounceIn');
+            }, 1100);
+        }, 400);
+
+        //  抽奖
+        function choujiang (){
+            //  get game result from server
+            if (!localStorage.isUserPlayedDuanwujie) {
+                console.log('连接抽奖服务器');
+
+                $.ajax({
+                    url: 'http://120.26.48.94:88/sijishangdong/userinfo',
+                    type: 'GET',
+                    crossDomain: true,
+                    statusCode: {
+                        200: function () {
+                            console.log('你中奖了哥们');
+                            localStorage.isWinDuanwujie = 200;
+
+                            $('.scene07 .get-ticket').fadeIn();
+                            $('.stars, .stars2').addClass('animated infinite bounceIn').removeClass('hide');
+
+                            setTimeout(function () {
+                                $('.scene07 .form').fadeIn(800);
+                            }, 3000);
+
+                            $('.form-close').unbind('click');
+                            $('.form-close').bind('click', function () {
+                                $('.form').fadeOut();
+                                setTimeout(function () {
+                                    $('.form-before').show();
+                                    $('.form-after').hide();
+                                }, 300);
+
+                                // jump to last scene
+                                setTimeout(function () {
+                                    //  go to final scene
+                                    setTimeout(function () {
+                                        app.mySwiper.slideTo(7, 1000, false);
+                                    }, 900);
+                                }, 400);
+                            });
+                        },
+
+                        10010: function () {
+                            console.log('你没中奖');
+                            $('.scene07 .not-get').show();
+                            localStorage.isWinDuanwujie = 10010;
+                        },
+
+                        10086: function () {
+                            console.log("活动结束");
+                            $('.scene07 .end').show();
+                            localStorage.isWinDuanwujie = 10086;
+                        }
+                    }
+                });
+
+                localStorage.isUserPlayedDuanwujie = true;
+            } else {
+            }
+
+        }
+
+        //  submit user info
+        $('.form-submit').unbind('click');
+        $('.form-submit').bind('click', submitUserInfo);
+
+        function submitUserInfo () {
+            //  test is user's name and phone number valid
+            var phoneValid = /^0?(13[0-9]|15[0-9]| 17[0-9] |18[0-9]|14[57])[0-9]{8}$/.test($('.form-number').val());
+            if ($('.form-name').val().trim()) {
+
+                if (phoneValid) {
+                    var userInfo = {
+                        "username": $('.form-name').val(),
+                        "phone": $('.form-number').val()
+                    };
+
+                    //  push userinfo to server
+                    $.ajax({
+                        url: 'http://120.26.48.94:88/sijishangdong/userinfo',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: userInfo,
+                        crossDomain: true
+                    });
+
+                    $('.form-before').hide();
+                    $('.form-after').fadeIn();
+
+                    // jump to last scene
+                    setTimeout(function () {
+                        $('.form').hide();
+                        $('.form-before').show();
+                        $('.form-after').hide();
+
+                        //  go to final scene
+                        setTimeout(function () {
+                            app.mySwiper.slideTo(7, 1000, false);
+                        }, 900);
+                    }, 2000);
+                } else {
+                    alert("请您填写正确的手机号码.");
+                }
+
+            } else {
+                alert("请您填写您的称呼和手机号码.");
+            }
+        }
     },
 
     start: function (){
