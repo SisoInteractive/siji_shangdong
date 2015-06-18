@@ -4,6 +4,8 @@
 * {
   padding: 0;
   margin: 0;
+  -webkit-backface-visibility: hidden;
+  -webkit-transform: translateZ(0) scale(1, 1);
 }
 html {
   height: 100%;
@@ -423,24 +425,68 @@ input {
           transition-delay: .3s;
 }
 .scene06 .bg03 {
-  background: url("../images/s6-groupup.png") no-repeat;
+  background: url("../images/s6-group01.png") no-repeat;
   -webkit-transition-delay: .6s;
           transition-delay: .6s;
   -webkit-transform: translate3d(0, -15px, 0);
           transform: translate3d(0, -15px, 0);
 }
 .scene06 .bg04 {
-  background: url("../images/s6-groupdown.png") no-repeat;
-  -webkit-transition-delay: .7s;
-          transition-delay: .7s;
+  background: url("../images/s6-group02.png") no-repeat;
+  -webkit-transition-delay: .9s;
+          transition-delay: .9s;
+  -webkit-transform: translate3d(0, -20px, 0);
+          transform: translate3d(0, -20px, 0);
+}
+.scene06 .bg05 {
+  background: url("../images/s6-group03.png") no-repeat;
+  -webkit-transition-delay: 1.2s;
+          transition-delay: 1.2s;
+  -webkit-transform: translate3d(0, -25px, 0);
+          transform: translate3d(0, -25px, 0);
+}
+.scene06 .bg06 {
+  background: url("../images/s6-group04.png") no-repeat;
+  -webkit-transition-delay: 1.5s;
+          transition-delay: 1.5s;
   -webkit-transform: translate3d(0, 15px, 0);
           transform: translate3d(0, 15px, 0);
+}
+.scene06 .bg07 {
+  background: url("../images/s6-group05.png") no-repeat;
+  -webkit-transition-delay: 1.8s;
+          transition-delay: 1.8s;
+  -webkit-transform: translate3d(0, 20px, 0);
+          transform: translate3d(0, 20px, 0);
+}
+.scene06 .bg08 {
+  background: url("../images/s6-group06.png") no-repeat;
+  -webkit-transition-delay: 2.1s;
+          transition-delay: 2.1s;
+  -webkit-transform: translate3d(0, 25px, 0);
+          transform: translate3d(0, 25px, 0);
 }
 .scene06.activeBg .bg03 {
   -webkit-transform: translate3d(0, 0, 0);
           transform: translate3d(0, 0, 0);
 }
 .scene06.activeBg .bg04 {
+  -webkit-transform: translate3d(0, 0, 0);
+          transform: translate3d(0, 0, 0);
+}
+.scene06.activeBg .bg05 {
+  -webkit-transform: translate3d(0, 0, 0);
+          transform: translate3d(0, 0, 0);
+}
+.scene06.activeBg .bg06 {
+  -webkit-transform: translate3d(0, 0, 0);
+          transform: translate3d(0, 0, 0);
+}
+.scene06.activeBg .bg07 {
+  -webkit-transform: translate3d(0, 0, 0);
+          transform: translate3d(0, 0, 0);
+}
+.scene06.activeBg .bg08 {
   -webkit-transform: translate3d(0, 0, 0);
           transform: translate3d(0, 0, 0);
 }

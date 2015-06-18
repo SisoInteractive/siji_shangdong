@@ -140,7 +140,7 @@ var app = {
         //  开始游戏
         function toTickerGame () {
             /** debug */
-            //clearPlayCache();
+            clearPlayCache();
 
             if (!localStorage.isUserPlayedDuanwujie) {
                 app.server();
@@ -204,7 +204,7 @@ var app = {
 
                             setTimeout(function () {
                                 $('.scene07 .form').fadeIn(800);
-                            }, 3000);
+                            }, 1800);
 
                             $('.form-close').unbind('click');
                             $('.form-close').bind('click', function () {

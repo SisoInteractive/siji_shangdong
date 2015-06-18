@@ -136,11 +136,12 @@ var app = {
 
         // init game
         toTickerGame();
-        clearPlayCache();
 
         //  开始游戏
         function toTickerGame () {
-            //  如果没玩过本游戏 则开始玩
+            /** debug */
+            clearPlayCache();
+
             if (!localStorage.isUserPlayedDuanwujie) {
                 app.server();
             } else {
@@ -186,7 +187,9 @@ var app = {
         //  抽奖
         function choujiang (){
             //  get game result from server
-            if (localStorage.isUserPlayedDuanwujie == false) {
+            if (!localStorage.isUserPlayedDuanwujie) {
+                console.log('连接抽奖服务器');
+
                 $.ajax({
                     url: 'http://120.26.48.94:88/sijishangdong/userinfo',
                     type: 'GET',
@@ -201,7 +204,7 @@ var app = {
 
                             setTimeout(function () {
                                 $('.scene07 .form').fadeIn(800);
-                            }, 3000);
+                            }, 1800);
 
                             $('.form-close').unbind('click');
                             $('.form-close').bind('click', function () {
@@ -237,7 +240,6 @@ var app = {
 
                 localStorage.isUserPlayedDuanwujie = true;
             } else {
-                alert('正在开奖');
             }
 
         }

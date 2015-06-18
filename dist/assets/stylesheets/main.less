@@ -3,7 +3,11 @@
 /*************************************/
     /* Reset */
 /*************************************/
-* { padding: 0; margin: 0;}
+* {
+  padding: 0;
+  margin: 0;
+  -webkit-backface-visibility: hidden;
+  -webkit-transform: translateZ(0) scale(1.0, 1.0);}
 
 html {
   height: 100%;
@@ -326,10 +330,18 @@ input {
 /* scene 06 bg */
 .scene06 .bg01 { background: url("../images/s6-ship.png") no-repeat; transition-delay: 0s; z-index: 10;}
 .scene06 .bg02 { background: url("../images/s6-zongziye.png") no-repeat; transition-delay: .3s;}
-.scene06 .bg03 { background: url("../images/s6-groupup.png") no-repeat; transition-delay: .6s; transform: translate3d(0, -15px, 0);}
-.scene06 .bg04 { background: url("../images/s6-groupdown.png") no-repeat; transition-delay: .7s; transform: translate3d(0, 15px, 0);}
+.scene06 .bg03 { background: url("../images/s6-group01.png") no-repeat; transition-delay: .6s; transform: translate3d(0, -15px, 0);}
+.scene06 .bg04 { background: url("../images/s6-group02.png") no-repeat; transition-delay: .9s; transform: translate3d(0, -20px, 0);}
+.scene06 .bg05 { background: url("../images/s6-group03.png") no-repeat; transition-delay: 1.2s; transform: translate3d(0, -25px, 0);}
+.scene06 .bg06 { background: url("../images/s6-group04.png") no-repeat; transition-delay: 1.5s; transform: translate3d(0, 15px, 0);}
+.scene06 .bg07 { background: url("../images/s6-group05.png") no-repeat; transition-delay: 1.8s; transform: translate3d(0, 20px, 0);}
+.scene06 .bg08 { background: url("../images/s6-group06.png") no-repeat; transition-delay: 2.1s; transform: translate3d(0, 25px, 0);}
 .scene06.activeBg .bg03 { transform: translate3d(0, 0, 0);}
 .scene06.activeBg .bg04 { transform: translate3d(0, 0, 0);}
+.scene06.activeBg .bg05 { transform: translate3d(0, 0, 0);}
+.scene06.activeBg .bg06 { transform: translate3d(0, 0, 0);}
+.scene06.activeBg .bg07 { transform: translate3d(0, 0, 0);}
+.scene06.activeBg .bg08 { transform: translate3d(0, 0, 0);}
 
 .scene.activeBg {
   .bg {
