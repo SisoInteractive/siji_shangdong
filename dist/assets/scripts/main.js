@@ -194,7 +194,7 @@ var app = {
         //  开始游戏
         function toTickerGame () {
             /** debug: clear cache */
-            //clearPlayCache();
+            clearPlayCache();
 
             if (!localStorage.isUserPlayedDuanwujie) {
                 app.server();
@@ -248,6 +248,7 @@ var app = {
                     url: 'http://120.26.48.94:88/sijishangdong/userinfo',
                     type: 'GET',
                     crossDomain: true,
+                    dataType: 'jsonp',
                     statusCode: {
                         200: function () {
                             console.log('你中奖了哥们');
@@ -289,6 +290,10 @@ var app = {
                             $('.scene07 .end').show();
                             localStorage.isWinDuanwujie = 10086;
                         }
+                    },
+
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        console.log(xhr.responseText,xhr.status, ajaxOptions, thrownError);
                     }
                 });
 
@@ -317,7 +322,7 @@ var app = {
                     $.ajax({
                         url: 'http://120.26.48.94:88/sijishangdong/userinfo',
                         type: 'POST',
-                        dataType: 'json',
+                        dataType: 'jsonp',
                         data: userInfo,
                         crossDomain: true
                     });
