@@ -120,8 +120,7 @@ var app = {
                             clearInterval(loadingTimer);
 
                             console.log('images load end');
-                        //}, 3000);
-                        }, 1);
+                        }, 3000);
                     }
                 }
             };
@@ -195,7 +194,7 @@ var app = {
         //  开始游戏
         function toTickerGame () {
             /** debug: clear cache */
-            clearPlayCache();
+            //  clearPlayCache();
 
             if (!localStorage.isUserPlayedDuanwujie) {
                 app.server();
@@ -280,10 +279,20 @@ var app = {
                     console.log('你没中奖');
                     $('.scene07 .not-get').show();
                     localStorage.isWinDuanwujie = 10010;
+
+                    //  go to final scene
+                    setTimeout(function () {
+                        app.mySwiper.slideTo(7, 1000, false);
+                    }, 900);
                 } else if (result == 10086) {
                     console.log("活动结束");
                     $('.scene07 .end').show();
                     localStorage.isWinDuanwujie = 10086;
+
+                    //  go to final scene
+                    setTimeout(function () {
+                        app.mySwiper.slideTo(7, 1000, false);
+                    }, 900);
                 }
 
                 localStorage.isUserPlayedDuanwujie = true;
