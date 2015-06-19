@@ -197,7 +197,7 @@ var app = {
             //  clearPlayCache();
 
             if (!localStorage.isUserPlayedDuanwujie) {
-                //  app.server();
+                app.server();
             } else {
                 //  赢了卷
                 if (localStorage.isWinDuanwujie == 200) {
@@ -279,10 +279,20 @@ var app = {
                     console.log('你没中奖');
                     $('.scene07 .not-get').show();
                     localStorage.isWinDuanwujie = 10010;
+
+                    //  go to final scene
+                    setTimeout(function () {
+                        app.mySwiper.slideTo(7, 1000, false);
+                    }, 900);
                 } else if (result == 10086) {
                     console.log("活动结束");
                     $('.scene07 .end').show();
                     localStorage.isWinDuanwujie = 10086;
+
+                    //  go to final scene
+                    setTimeout(function () {
+                        app.mySwiper.slideTo(7, 1000, false);
+                    }, 900);
                 }
 
                 localStorage.isUserPlayedDuanwujie = true;
