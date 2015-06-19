@@ -120,8 +120,7 @@ var app = {
                             clearInterval(loadingTimer);
 
                             console.log('images load end');
-                        //}, 3000);
-                        }, 1);
+                        }, 3000);
                     }
                 }
             };
@@ -195,10 +194,10 @@ var app = {
         //  开始游戏
         function toTickerGame () {
             /** debug: clear cache */
-            clearPlayCache();
+            //  clearPlayCache();
 
             if (!localStorage.isUserPlayedDuanwujie) {
-                app.server();
+                //  app.server();
             } else {
                 //  赢了卷
                 if (localStorage.isWinDuanwujie == 200) {
