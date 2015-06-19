@@ -120,7 +120,8 @@ var app = {
                             clearInterval(loadingTimer);
 
                             console.log('images load end');
-                        }, 3000);
+                        //}, 3000);
+                        }, 1);
                     }
                 }
             };
@@ -226,9 +227,70 @@ var app = {
     server: function () {
         console.log("Initializing server...");
 
+        //  socket io
+        var socket = io.connect('http://120.26.48.94:88');
+
         //  try button
         $('.try .try-btn').unbind('click');
-        $('.try .try-btn').bind('click', choujiang);
+        $('.try .try-btn').bind('click', function () {
+            // '连接抽奖服务器'
+            console.log('connect to choujiang event');
+            socket.emit('choujiang', {});
+        });
+
+
+        //  '获取游戏结果'
+        socket.on('gameresult', onGameResultHandle);
+
+        function onGameResultHandle(data) {
+            console.log('get game result from socket::', data);
+            //  get game result from server
+            if (!localStorage.isUserPlayedDuanwujie) {
+
+                var result = data.result;
+
+                if (result == 200) {
+                    console.log('你中奖了哥们');
+                    localStorage.isWinDuanwujie = 200;
+
+                    $('.scene07 .get-ticket').fadeIn();
+                    $('.stars, .stars2').addClass('animated infinite bounceIn').removeClass('hide');
+
+                    setTimeout(function () {
+                        $('.scene07 .form').fadeIn(800);
+                    }, 1800);
+
+                    $('.form-close').unbind('click');
+                    $('.form-close').bind('click', function () {
+                        $('.form').fadeOut();
+                        setTimeout(function () {
+                            $('.form-before').show();
+                            $('.form-after').hide();
+                        }, 300);
+
+                        // jump to last scene
+                        setTimeout(function () {
+                            //  go to final scene
+                            setTimeout(function () {
+                                app.mySwiper.slideTo(7, 1000, false);
+                            }, 900);
+                        }, 400);
+                    });
+                } else if (result == 10010) {
+                    console.log('你没中奖');
+                    $('.scene07 .not-get').show();
+                    localStorage.isWinDuanwujie = 10010;
+                } else if (result == 10086) {
+                    console.log("活动结束");
+                    $('.scene07 .end').show();
+                    localStorage.isWinDuanwujie = 10086;
+                }
+
+                localStorage.isUserPlayedDuanwujie = true;
+            } else {
+            }
+        }
+
 
         //  抽奖粽子跟抽奖按钮的效果
         setTimeout(function () {
@@ -237,75 +299,6 @@ var app = {
                 $('.try .try-btn').addClass('bounceIn');
             }, 1100);
         }, 400);
-
-        //  抽奖
-        function choujiang (){
-            //  get game result from server
-            if (!localStorage.isUserPlayedDuanwujie) {
-                console.log('连接抽奖服务器');
-
-                $.ajax({
-                    url: 'http://120.26.48.94:88/sijishangdong/userinfo',
-                    type: 'GET',
-                    crossDomain: true,
-                    dataType: 'json',
-                    statusCode: {
-                        200: function () {
-                            console.log('你中奖了哥们');
-                            localStorage.isWinDuanwujie = 200;
-
-                            $('.scene07 .get-ticket').fadeIn();
-                            $('.stars, .stars2').addClass('animated infinite bounceIn').removeClass('hide');
-
-                            setTimeout(function () {
-                                $('.scene07 .form').fadeIn(800);
-                            }, 1800);
-
-                            $('.form-close').unbind('click');
-                            $('.form-close').bind('click', function () {
-                                $('.form').fadeOut();
-                                setTimeout(function () {
-                                    $('.form-before').show();
-                                    $('.form-after').hide();
-                                }, 300);
-
-                                // jump to last scene
-                                setTimeout(function () {
-                                    //  go to final scene
-                                    setTimeout(function () {
-                                        app.mySwiper.slideTo(7, 1000, false);
-                                    }, 900);
-                                }, 400);
-                            });
-                        },
-
-                        10010: function () {
-                            console.log('你没中奖');
-                            $('.scene07 .not-get').show();
-                            localStorage.isWinDuanwujie = 10010;
-                        },
-
-                        10086: function () {
-                            console.log("活动结束");
-                            $('.scene07 .end').show();
-                            localStorage.isWinDuanwujie = 10086;
-                        }
-                    },
-
-                    success: function () {
-                        console.log('success!!!!!');
-                    },
-
-                    error: function (xhr, ajaxOptions, thrownError) {
-                        console.log(xhr.responseText,xhr.status, ajaxOptions, thrownError);
-                    }
-                });
-
-                localStorage.isUserPlayedDuanwujie = true;
-            } else {
-            }
-
-        }
 
         //  submit user info
         $('.form-submit').unbind('click');
@@ -323,13 +316,7 @@ var app = {
                     };
 
                     //  push userinfo to server
-                    $.ajax({
-                        url: 'http://120.26.48.94:88/sijishangdong/userinfo',
-                        type: 'POST',
-                        dataType: 'jsonp',
-                        data: userInfo,
-                        crossDomain: true
-                    });
+                    socket.emit('userinfo', userInfo);
 
                     $('.form-before').hide();
                     $('.form-after').fadeIn();
@@ -353,6 +340,11 @@ var app = {
                 alert("请您填写您的称呼和手机号码.");
             }
         }
+
+        //  on store info result
+        socket.on('storeduser', function () {
+            console.log("The user's information have been updated to server.");
+        });
     },
 
     start: function (){
