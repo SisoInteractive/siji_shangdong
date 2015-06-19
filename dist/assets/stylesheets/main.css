@@ -71,6 +71,8 @@ input {
 /* audio */
 #audio {
   display: none;
+  position: absolute;
+  left: -5000px;
 }
 /* animation */
 .animated {
