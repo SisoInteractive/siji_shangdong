@@ -248,7 +248,7 @@ var app = {
                     url: 'http://120.26.48.94:88/sijishangdong/userinfo',
                     type: 'GET',
                     crossDomain: true,
-                    dataType: 'jsonp',
+                    dataType: 'json',
                     statusCode: {
                         200: function () {
                             console.log('你中奖了哥们');
@@ -290,6 +290,10 @@ var app = {
                             $('.scene07 .end').show();
                             localStorage.isWinDuanwujie = 10086;
                         }
+                    },
+
+                    success: function () {
+                        console.log('success!!!!!');
                     },
 
                     error: function (xhr, ajaxOptions, thrownError) {
