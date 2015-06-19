@@ -227,7 +227,7 @@ var app = {
         console.log("Initializing server...");
 
         //  socket io
-        var socket = io.connect('http://120.26.48.94:88');
+        var socket = io.connect('http://120.26.48.94:188');
 
         //  try button
         $('.try .try-btn').unbind('click');
