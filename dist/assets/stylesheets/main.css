@@ -635,7 +635,7 @@ input {
   color: #4a3230;
 }
 .scene07 .get-ticket .form-before .form-name {
-  top: 18%;
+  top: 20%;
 }
 .scene07 .get-ticket .form-before .form-number {
   top: 38%;
@@ -643,7 +643,7 @@ input {
 .scene07 .get-ticket .form-before .form-submit {
   position: absolute;
   left: 36%;
-  top: 77%;
+  top: 53%;
   width: 80px;
   height: 43px;
   cursor: pointer;
